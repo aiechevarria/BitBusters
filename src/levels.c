@@ -4,12 +4,11 @@
  * @authors Aitor Echevarría Floranes, Rubén San Pedro.
  */
 
-#include "stdbool.h"
-#include "level.h"
+#include "levels.h"
 
 /* Private functions */
 void drawLevel(uint8 number);
-bool isMoveValid(Tile** tiles, uint8 origX, uint8 origY, uint8 destX, uint8 destY);
+char isMoveValid(Tile** tiles, uint8 origX, uint8 origY, uint8 destX, uint8 destY);
 
 /**
  * Loads a level for the first time 
@@ -59,7 +58,7 @@ void move(LevelInfo* level, uint8 origX, uint8 origY, uint8 destX, uint8 destY) 
  * @param destY Destination Y position.
  * @return true if valid, false if not 
  */
-bool isMoveValid(Tile** tiles, uint8 origX, uint8 origY, uint8 destX, uint8 destY) {
+char isMoveValid(Tile** tiles, uint8 origX, uint8 origY, uint8 destX, uint8 destY) {
    return false;
 }
 

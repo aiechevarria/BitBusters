@@ -5,7 +5,6 @@
  */
 
 #include "levels.h"
-#include "items.h"
 
 // Pointer to the current loaded level
 LevelInfo* currentLevel;
