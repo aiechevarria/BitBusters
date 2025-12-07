@@ -3,6 +3,8 @@
 #include "levels.h"
 #include "renderer.h"
 
+#include <stdio.h>
+
 int main() {
     // Pointer to the current loaded level
     LevelInfo currentLevel;
@@ -22,10 +24,13 @@ int main() {
     // Load the selected level
     initLevel(&currentLevel, 1);
 
-    printLevelToConsole(currentLevel.bg, currentLevel.fg);
-
     while (true) {
+        printLevelToConsole(currentLevel.bg, currentLevel.fg, cursorY, cursorX);
+
         // Check if there are any inputs
+        input = listenForKeypress();
+
+        printf("Score=%d\n", currentLevel.score);
 
         // If there was no previous selection
         if (selectedY == -1) {

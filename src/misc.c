@@ -2,6 +2,14 @@
 #include "levels.h"
 #include "stdbool.h"
 
+// These are optional and used only for the debug functions without the basys
+// Can be removed if listenForKeypress is commented
+#include <unistd.h>
+#include <stdio.h>
+#include <termios.h>
+#include <fcntl.h>
+
+
 unsigned int rngState = SEED;
 
 /**
@@ -58,4 +66,42 @@ bool updateCursor(LevelInfo* currentLevel, uint8* cursorY, uint8* cursorX, Input
             break;
     }
     return false;
+}
+
+Input listenForKeypress() {
+    struct termios oldt, newt;
+    char ch;
+
+    // Set up terminal settings for non-canonical mode
+    tcgetattr(STDIN_FILENO, &oldt);        // Get current terminal settings
+    newt = oldt;
+    newt.c_lflag &= ~(ICANON | ECHO);       // Disable canonical mode and echoing
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt); // Apply new settings
+
+    // Loop until a valid key is pressed
+    while (1) {
+        ch = getchar();  // Read a single character from input
+
+        // Check if the key pressed matches any of the valid inputs
+        switch (ch) {
+            case 'w':  // UP
+                tcsetattr(STDIN_FILENO, TCSANOW, &oldt);  // Restore terminal settings
+                return UP;
+            case 'a':  // LEFT
+                tcsetattr(STDIN_FILENO, TCSANOW, &oldt);  // Restore terminal settings
+                return LEFT;
+            case 's':  // DOWN
+                tcsetattr(STDIN_FILENO, TCSANOW, &oldt);  // Restore terminal settings
+                return DOWN;
+            case 'd':  // RIGHT
+                tcsetattr(STDIN_FILENO, TCSANOW, &oldt);  // Restore terminal settings
+                return RIGHT;
+            case 'e':  // RIGHT
+                tcsetattr(STDIN_FILENO, TCSANOW, &oldt);  // Restore terminal settings
+                return SELECT;
+            default:
+                // If the input is not recognized, continue looping
+                continue;
+        }
+    }
 }
