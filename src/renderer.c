@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "renderer.h"
 #include "graphics.h"
 
@@ -60,4 +62,19 @@ void renderCursor() {
  */
 void renderMenu() {
 
+}
+
+/**
+ * For debuging purposes, prints the current level to stdout.
+ * 
+ * @param tiles The tileset.
+ * @param items The itemset.
+ */
+void printLevelToConsole(Tile** tiles, Item** items) {
+    for (int i = 0; i < NUM_TILES; i++) {
+        for (int j = 0; j < NUM_TILES; j++) {
+            printf("%x%x ", tiles[i][j], items[i][j]);
+        }
+        printf("\n");
+    }
 }
