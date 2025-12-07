@@ -4,6 +4,9 @@
  * @authors Aitor Echevarría Floranes, Rubén San Pedro.
  */
 
+#ifndef GRAPHICS_H
+#define GRAPHICS_H
+
 #include "levels.h"
 
 #define SPRITE_SIZE 12
@@ -83,3 +86,5 @@ const char itemSprites[NUM_ITEMS][SPRITE_SIZE][SPRITE_SIZE] = {
 const char tileSprites[NUM_TILES][SPRITE_SIZE][SPRITE_SIZE] = {
     // TODO THis should be drawn in the background
 };
+
+#endif
