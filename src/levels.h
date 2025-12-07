@@ -54,8 +54,8 @@ typedef enum {
 // A full combination
 typedef struct {
     Item itemToGenerate;                                // What item should be generated due to this combination.
-    uint8 yMin, yMax;                                   // Y range that the combination has
-    uint8 xMin, xMax;                                   // X range that the combination has
+    int8 yMin, yMax;                                    // Y range that the combination has
+    int8 xMin, xMax;                                    // X range that the combination has
 } Combination;
 
 typedef struct {
@@ -84,5 +84,6 @@ extern const LevelInfo levels[MAX_LEVELS];
 
 /* Public functions */
 void initLevel(LevelInfo* level, uint8 number);
+int performMove(LevelInfo* level, uint8 origY, uint8 origX, uint8 destY, uint8 destX);
 
 #endif

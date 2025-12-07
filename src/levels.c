@@ -4,8 +4,6 @@
  * @authors Aitor Echevarría Floranes, Rubén San Pedro.
  */
 
-#include <stdio.h>
-
 #include "levels.h"
 #include "misc.h"
 #include "stdbool.h"
@@ -91,19 +89,7 @@ void initLevel(LevelInfo* level, uint8 number) {
 }
 
 /**
- * Draws a level in the level part of the screen
- * @param number The number of the level to draw 
- */
-void drawLevel(uint8 number) {
-
-}
-
-
-
-/**
  * Moves a tile from the original coordinates to the destination coordinates.
- * If the move can be done, decrement the number of moves the player has by one and add to it's score.
- * If not, return without altering state.
  * 
  * @param level Pointer to the ongoing level.
  * @param origX Original X position.
@@ -111,36 +97,25 @@ void drawLevel(uint8 number) {
  * @param destX Destination X position.
  * @param destY Destination Y position.
  */
-void move(LevelInfo* level, uint8 origY, uint8 origX, uint8 destY, uint8 destX) {
-    // Check if the move is valid
-    return;
+void exchange(LevelInfo* level, uint8 origY, uint8 origX, uint8 destY, uint8 destX) {
+    Item tmp = level->fg[origY][origX];
+    level->fg[origY][origX] = level->fg[destY][destX];
+    level->fg[destY][destX] = tmp;
 }
 
 /**
- * Checks if the move is valid or not
- * @param origX Original X position.
- * @param origY Original Y position.
- * @param destX Destination X position.
- * @param destY Destination Y position.
- * @return true if valid, false if not 
- */
-char isMoveValid(Tile** tiles, uint8 origY, uint8 origX, uint8 destY, uint8 destX) {
-   return false;
-}
-
-
-/**
- * Checks if the move is valid or not
+ * Explodes a bomb and replaces each tile with a new, random one.
+ * 
  * @param level Pointer to the ongoing level.
- * @param origX Original X position.
- * @param origY Original Y position.
- * @param destX Destination X position.
- * @param destY Destination Y position.
- * @return The score 
+ * @param y Bomb y position
+ * @param x Bomb x position
+ * @param item Item to explode
+ * @return The number of exploded items.
  */
-int performMove(Tile** tiles, Item** items, uint8 origY, uint8 origX, uint8 destY, uint8 destX) {
-   return false;
+int specialExplodeBomb(LevelInfo* level, uint8 y, uint8 x, Item item) {
+
 }
+
 
 /**
  * Checks that for a certain tile if a combination can be made. If a combination can be made, return true and 
@@ -152,6 +127,13 @@ bool checkForCombination(Item item[MAX_Y_SPRITES][MAX_X_SPRITES], uint8 y, uint8
 
     char columnAccum = 0;
     char rowAccum = 0;
+
+    // Init the combination
+    c->yMax = -1;
+    c->yMin = -1;
+    c->xMax = -1;
+    c->xMin = -1;
+    c->itemToGenerate = ITEM_EMPTY;
 
     // First check if the current column has more or 3 consecutive items
     for (int i = 0; i < MAX_Y_SPRITES; i++) {
@@ -220,6 +202,79 @@ bool checkForCombination(Item item[MAX_Y_SPRITES][MAX_X_SPRITES], uint8 y, uint8
         return false;
     }
 }
+
+int removeItemsFromCombination(Item item[MAX_Y_SPRITES][MAX_X_SPRITES], uint8 y, uint8 x, Combination* c) {
+    Combination temp;
+    int score;
+
+    // Fill the items that have to get replaced with new ones and make sure that does not generate a combination
+    if (c->yMax != -1 && c->yMin != -1) {
+        for (int i = c->yMin; i <= c->yMax; i++) {
+            score++;
+            do {
+                item[i][x] = pseudoRNG() % NUM_COLORED_ITEMS;
+            } while (checkForCombination(item, i, x, &temp));
+        }
+    }
+
+    // Same for x
+    if (c->xMax != -1 && c->xMin != -1) {
+        for (int i = c->xMin; i <= c->xMax; i++) {
+            score++;
+            do {
+                item[y][i] = pseudoRNG() % NUM_COLORED_ITEMS;
+            } while (checkForCombination(item, y, i, &temp));
+        }
+    }
+    
+    // Clear the combination
+    c->yMax = -1;
+    c->yMin = -1;
+    c->xMax = -1;
+    c->xMin = -1;
+    c->itemToGenerate = ITEM_EMPTY;
+
+    return score;
+}
+
+/**
+ * Makes a move. Checks if a combination was made, substitutes the items that were involved in the combination and 
+ * places a special item if the move generated it. Also removes corruption and calculates the score
+ * @param level Pointer to the ongoing level.
+ * @param origX Original X position.
+ * @param origY Original Y position.
+ * @param destX Destination X position.
+ * @param destY Destination Y position.
+ * @return 
+ */
+int performMove(LevelInfo* level, uint8 origY, uint8 origX, uint8 destY, uint8 destX) {
+    int score = 0;
+    Combination c;
+
+    // If it's a bomb, explode it
+    if (level->fg[origY][origX] == ITEM_BOMB) {
+        score = specialExplodeBomb(level, origY, origX, level->fg[destY][destX]);
+    } else if (level->fg[destY][destX] == ITEM_BOMB) {
+        score = specialExplodeBomb(level, destY, destX, level->fg[origY][origX]);
+    } else {
+        // If not, make the move
+        exchange(level, origY, origX, destY, destX);
+
+        // Check if the move made a combination
+        if (checkForCombination(level->fg, destY, destX, &c)) {
+            score += removeItemsFromCombination(level->fg, destY, destX, &c);
+        }
+
+        // Also check the origin
+        if (checkForCombination(level->fg, origY, origX, &c)) {
+            score += removeItemsFromCombination(level->fg, origY, origX, &c);
+        }
+    }
+
+    // TODO the jelly stuff / score stuff
+    return score;
+}
+
 
 /**
  * For a given tileset, generates a random pattern of items.

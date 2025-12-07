@@ -27,6 +27,6 @@ typedef enum {
 
 
 unsigned char pseudoRNG(void);
-void updateCursor(LevelInfo* currentLevel, uint8* cursorY, uint8* cursorX, Input input);
+bool updateCursor(LevelInfo* currentLevel, uint8* cursorY, uint8* cursorX, Input input);
 
 #endif
