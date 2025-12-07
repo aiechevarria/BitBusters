@@ -3,12 +3,21 @@
  * 
  * @authors Aitor Echevarría Floranes, Rubén San Pedro.
  */
+#ifndef LEVELS_H
+#define LEVELS_H
+
+#include "misc.h"
 
 #define MAX_LEVELS      3
 
 // Number of elements in a level
 #define MAX_X_SPRITES    10
 #define MAX_Y_SPRITES    10
+
+// Max number of colored items
+#define NUM_COLORED_ITEMS 5
+
+#define MAX_COMBINATION_PARTS 6
 
 // The different types of tiles a level can have. Drawn on the background
 typedef enum {
@@ -30,6 +39,7 @@ typedef enum {
     ITEM_COLUMN,        // Clears an entire column
     ITEM_SPARK,         // Clears the adjacent 9 tiles
     ITEM_BOMB,          // Clears all the items in the level that are of the same type
+    ITEM_EMPTY,         // Represents no item
     NUM_ITEMS
 } Item;
 
@@ -40,6 +50,13 @@ typedef enum {
     OBJ_GET_SCORE,          // Get a lot of score in this level;
     NUM_OBJECTIVES
 } Objective;
+
+// A full combination
+typedef struct {
+    Item itemToGenerate;                                // What item should be generated due to this combination.
+    uint8 yMin, yMax;                                   // Y range that the combination has
+    uint8 xMin, xMax;                                   // X range that the combination has
+} Combination;
 
 typedef struct {
     // Parameters that do not update on each move
@@ -61,16 +78,17 @@ typedef struct {
     // Parameters that are updated on each move. This gets copied on init
     uint8 moves;            // Remaining moves
     uint8 score;            // Current score
-    Tile level[MAX_X_SPRITES][MAX_Y_SPRITES];     // Current state of the level
+    Tile bg[MAX_X_SPRITES][MAX_Y_SPRITES];     // Current state of the background
+    Item fg[MAX_X_SPRITES][MAX_Y_SPRITES];     // Current state of the foreground
 } LevelInfo;
 
 const LevelInfo levels[MAX_LEVELS] = {
     {
-        .moves = 25,
-        .max_score = 0,
-        .objective = OBJ_DESTROY_JELLY,
-        .objJellyRemaining = 10,
-        .level = {
+        .startMoves = 25,
+        .maxScore = 0,
+        .objective = OBJ_DESTROY_CORPT,
+        .objCorptRemaining = 10,
+        .bg = {
             {CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
             {EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
             {EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
@@ -84,39 +102,45 @@ const LevelInfo levels[MAX_LEVELS] = {
         }
     },
     {
-        .moves = 25,
-        .max_score = 0,
-        .level = {
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 1, 1, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 1, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 1, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 1, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 1, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 1}
+        .startMoves = 25,
+        .maxScore = 0,
+        .objective = OBJ_DESTROY_CORPT,
+        .objCorptRemaining = 10,
+        .bg = {
+            {CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT}
         }
     },
     {
-        .moves = 25,
-        .max_score = 0,
-        .level = {
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 1, 1, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 1, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 1, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 1, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 1, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 1}
+        .startMoves = 25,
+        .maxScore = 0,
+        .objective = OBJ_DESTROY_CORPT,
+        .objCorptRemaining = 10,
+        .bg = {
+            {CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT}
         }
     }
 };
 
 
 /* Public functions */
-void initLevel(LevelInfo* level, uint8 level);
+void initLevel(LevelInfo* level, uint8 number);
+
+#endif
