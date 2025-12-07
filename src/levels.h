@@ -6,7 +6,7 @@
 #ifndef LEVELS_H
 #define LEVELS_H
 
-#include "misc.h"
+#include "types.h"
 
 #define MAX_LEVELS      3
 
