@@ -59,9 +59,9 @@ typedef struct {
 } Combination;
 
 typedef struct {
-    // Parameters that do not update on each move
-    uint8 startMoves;
-    uint32 maxScore;
+    // General parameters
+    uint8 moves;
+    uint32 score;
     Objective objective;
 
     // Params for particular objectives
@@ -73,72 +73,14 @@ typedef struct {
     uint16 objItemDestroy;     // How many of that color to destroy
 
     // OBJ_GET_SCORE
-    uint16 objScore;           // How much score should be reached to end the level
+    uint32 objScore;           // How much score should be reached to end the level
 
-    // Parameters that are updated on each move. This gets copied on init
-    uint8 moves;            // Remaining moves
-    uint8 score;            // Current score
-    Tile bg[MAX_X_SPRITES][MAX_Y_SPRITES];     // Current state of the background
-    Item fg[MAX_X_SPRITES][MAX_Y_SPRITES];     // Current state of the foreground
+    // Background and foreground
+    Tile bg[MAX_Y_SPRITES][MAX_X_SPRITES];     // Current state of the background
+    Item fg[MAX_Y_SPRITES][MAX_X_SPRITES];     // Current state of the foreground
 } LevelInfo;
 
-const LevelInfo levels[MAX_LEVELS] = {
-    {
-        .startMoves = 25,
-        .maxScore = 0,
-        .objective = OBJ_DESTROY_CORPT,
-        .objCorptRemaining = 10,
-        .bg = {
-            {CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
-            {EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
-            {EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
-            {EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
-            {EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
-            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY},
-            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY},
-            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY},
-            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY},
-            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT}
-        }
-    },
-    {
-        .startMoves = 25,
-        .maxScore = 0,
-        .objective = OBJ_DESTROY_CORPT,
-        .objCorptRemaining = 10,
-        .bg = {
-            {CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
-            {EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
-            {EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
-            {EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
-            {EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
-            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY},
-            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY},
-            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY},
-            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY},
-            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT}
-        }
-    },
-    {
-        .startMoves = 25,
-        .maxScore = 0,
-        .objective = OBJ_DESTROY_CORPT,
-        .objCorptRemaining = 10,
-        .bg = {
-            {CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
-            {EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
-            {EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
-            {EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
-            {EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
-            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY},
-            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY},
-            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY},
-            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY},
-            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT}
-        }
-    }
-};
-
+extern const LevelInfo levels[MAX_LEVELS];
 
 /* Public functions */
 void initLevel(LevelInfo* level, uint8 number);

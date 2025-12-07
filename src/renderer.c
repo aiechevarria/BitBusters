@@ -2,6 +2,7 @@
 
 #include "renderer.h"
 #include "graphics.h"
+#include "levels.h"
 
 /**
  * Draws a particular pixel in the specified part of the screen.
@@ -70,9 +71,9 @@ void renderMenu() {
  * @param tiles The tileset.
  * @param items The itemset.
  */
-void printLevelToConsole(Tile** tiles, Item** items) {
-    for (int i = 0; i < NUM_TILES; i++) {
-        for (int j = 0; j < NUM_TILES; j++) {
+void printLevelToConsole(Tile tiles[MAX_Y_SPRITES][MAX_X_SPRITES], Item items[MAX_Y_SPRITES][MAX_X_SPRITES]) {
+    for (int i = 0; i < MAX_Y_SPRITES; i++) {
+        for (int j = 0; j < MAX_X_SPRITES; j++) {
             printf("%x%x ", tiles[i][j], items[i][j]);
         }
         printf("\n");

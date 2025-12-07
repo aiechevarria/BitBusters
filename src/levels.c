@@ -4,13 +4,71 @@
  * @authors Aitor Echevarría Floranes, Rubén San Pedro.
  */
 
+#include <stdio.h>
+
 #include "levels.h"
 #include "misc.h"
 #include "stdbool.h"
 
+/* Levels */
+const LevelInfo levels[MAX_LEVELS] = {
+    {
+        .moves = 25,
+        .objective = OBJ_DESTROY_CORPT,
+        .objCorptRemaining = 10,
+        .bg = {
+            {CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT}
+        }
+    },
+    {
+        .moves = 25,
+        .objective = OBJ_DESTROY_CORPT,
+        .objCorptRemaining = 10,
+        .bg = {
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY}
+        }
+    },
+    {
+        .moves = 25,
+        .objective = OBJ_DESTROY_CORPT,
+        .objCorptRemaining = 10,
+        .bg = {
+            {CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT}
+        }
+    }
+};
+
 /* Private functions */
 void drawLevel(uint8 number);
-char isMoveValid(Tile** tiles, uint8 origX, uint8 origY, uint8 destX, uint8 destY);
+char isMoveValid(Tile** tiles, uint8 origY, uint8 origX, uint8 destY, uint8 destX);
+void generateRandomItemset(Tile tiles[MAX_Y_SPRITES][MAX_X_SPRITES], Item items[MAX_Y_SPRITES][MAX_X_SPRITES]);
 
 /**
  * Loads a level for the first time 
@@ -18,7 +76,18 @@ char isMoveValid(Tile** tiles, uint8 origX, uint8 origY, uint8 destX, uint8 dest
  * @param number The number of the level to load
  */
 void initLevel(LevelInfo* level, uint8 number) {
+    level->score = 0;
+    level->moves = levels[number].moves;
 
+    // Copy the background
+    for (int i = 0; i < MAX_Y_SPRITES; i++) {
+        for (int j = 0; j < MAX_X_SPRITES; j++) {
+            level->bg[i][j] = levels[number].bg[i][j];
+        }
+    }
+
+    // Generate the random tileset on top of the background
+    generateRandomItemset(level->bg, level->fg);
 }
 
 /**
@@ -42,7 +111,7 @@ void drawLevel(uint8 number) {
  * @param destX Destination X position.
  * @param destY Destination Y position.
  */
-void move(LevelInfo* level, uint8 origX, uint8 origY, uint8 destX, uint8 destY) {
+void move(LevelInfo* level, uint8 origY, uint8 origX, uint8 destY, uint8 destX) {
     // Check if the move is valid
     return;
 }
@@ -55,7 +124,7 @@ void move(LevelInfo* level, uint8 origX, uint8 origY, uint8 destX, uint8 destY) 
  * @param destY Destination Y position.
  * @return true if valid, false if not 
  */
-char isMoveValid(Tile** tiles, uint8 origX, uint8 origY, uint8 destX, uint8 destY) {
+char isMoveValid(Tile** tiles, uint8 origY, uint8 origX, uint8 destY, uint8 destX) {
    return false;
 }
 
@@ -69,7 +138,7 @@ char isMoveValid(Tile** tiles, uint8 origX, uint8 origY, uint8 destX, uint8 dest
  * @param destY Destination Y position.
  * @return The score 
  */
-int performMove(Tile** tiles, Item** items, uint8 origX, uint8 origY, uint8 destX, uint8 destY) {
+int performMove(Tile** tiles, Item** items, uint8 origY, uint8 origX, uint8 destY, uint8 destX) {
    return false;
 }
 
@@ -77,7 +146,7 @@ int performMove(Tile** tiles, Item** items, uint8 origX, uint8 origY, uint8 dest
  * Checks that for a certain tile if a combination can be made. If a combination can be made, return true and 
  * the tiles that will cause the combinaiton to happen.
  */
-bool checkForCombination(Item** item, uint8 x, uint8 y, Combination* c) {
+bool checkForCombination(Item item[MAX_Y_SPRITES][MAX_X_SPRITES], uint8 y, uint8 x, Combination* c) {
     uint8 numConsColumn = 0;
     uint8 numConsRow = 0;
 
@@ -87,46 +156,47 @@ bool checkForCombination(Item** item, uint8 x, uint8 y, Combination* c) {
     // First check if the current column has more or 3 consecutive items
     for (int i = 0; i < MAX_Y_SPRITES; i++) {
         // If the current item matches the item in the current slot:
-        if (item[x][i] == item[x][y]) {
-
+        if (item[i][x] == item[y][x]) {
             // Increment the accumulator of consecutive items
             columnAccum++;
-        } else {
+        }
+
+        // Also, if there is nothing else to process, finish the evaluation right here
+        if (item [i][x] != item[y][x] || i == MAX_Y_SPRITES - 1) {
             // If the accumulator was more than 3 at some point and y was inside of it, flag the line as having that char
-            // TODO check if this is right
-            if (columnAccum > 3 && y >= i - 1 - columnAccum && y < i - 1) {
+            if (columnAccum >= 3 && y > i - 1 - columnAccum && y < i - 1) {
                 numConsColumn = columnAccum;
 
                 // Store the bounds of the combination and stop the column search
                 c->yMin = i - 1 - columnAccum;
                 c->yMax = i - 1;
                 break;
-            } else {
-                columnAccum = 0;
             }
+            columnAccum = 0;
         }
     }
 
     // Same for the X axis
     for (int i = 0; i < MAX_X_SPRITES; i++) {
         // If the current item matches the item in the current slot:
-        if (item[i][y] == item[x][y]) {
+        if (item[y][i] == item[y][x]) {
 
             // Increment the accumulator of consecutive items
             rowAccum++;
-        } else {
+        }
+
+        // Also, if there is nothing else to process, finish the evaluation right here
+        if (item [y][i] != item[y][x] || i == MAX_X_SPRITES - 1) {
             // If the accumulator was more than 3 at some point and y was inside of it, flag the line as having that char
-            // TODO check if this is right
-            if (rowAccum > 3 && x >= i - 1 - rowAccum && x < i - 1) {
+            if (rowAccum >= 3 && x > i - 1 - rowAccum && x < i - 1) {
                 numConsRow = rowAccum;
 
                 // Store the bounds of the combination and stop the column search
                 c->xMin = i - 1 - rowAccum;
                 c->xMax = i - 1;
                 break;
-            } else {
-                rowAccum = 0;
             }
+            rowAccum = 0;
         }
     }
 
@@ -156,12 +226,12 @@ bool checkForCombination(Item** item, uint8 x, uint8 y, Combination* c) {
  * @param tiles The tileset.
  * @param items The itemset to generate.
  */
-void generateRandomItemset(Tile** tiles, Item** items) {
+void generateRandomItemset(Tile tiles[MAX_Y_SPRITES][MAX_X_SPRITES], Item items[MAX_Y_SPRITES][MAX_X_SPRITES]) {
     Combination c;
     bool combinationFound = false;
 
-    for (int i = 0; i < NUM_TILES; i++) {
-        for (int j = 0; j < NUM_TILES; j++) {
+    for (int i = 0; i < MAX_Y_SPRITES; i++) {
+        for (int j = 0; j < MAX_X_SPRITES; j++) {
             // If the tile can be filled, do so with a random item
             if (tiles[i][j] != UNFIL) {
                 items[i][j] = pseudoRNG() % NUM_COLORED_ITEMS;
@@ -175,8 +245,8 @@ void generateRandomItemset(Tile** tiles, Item** items) {
     // After that, for each tile, check that no combinations are present, and if so, change that item for another one 
     do {
         combinationFound = false;
-        for (int i = 0; i < NUM_TILES; i++) {
-            for (int j = 0; j < NUM_TILES; j++) {
+        for (int i = 0; i < MAX_Y_SPRITES; i++) {
+            for (int j = 0; j < MAX_X_SPRITES; j++) {
                 // If a combination is possible for that position, replace it with another random item
                 if (checkForCombination(items, i, j, &c)) {
                     items[i][j] = pseudoRNG() % NUM_COLORED_ITEMS;

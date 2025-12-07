@@ -14,7 +14,7 @@ SRCS = $(wildcard $(SRC_DIR)/*.c)
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(BUILD_DIR)/%.o)
 
 # Executable name
-EXEC = $(BUILD_DIR)/my_program
+EXEC = $(BUILD_DIR)/bitbusters
 
 # Ensure build directory exists
 $(BUILD_DIR):
