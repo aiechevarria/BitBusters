@@ -146,11 +146,11 @@ bool checkForCombination(Item item[MAX_Y_SPRITES][MAX_X_SPRITES], uint8 y, uint8
         // Also, if there is nothing else to process, finish the evaluation right here
         if (item [i][x] != item[y][x] || i == MAX_Y_SPRITES - 1) {
             // If the accumulator was more than 3 at some point and y was inside of it, flag the line as having that char
-            if (columnAccum >= 3 && y > i - 1 - columnAccum && y < i - 1) {
+            if (columnAccum >= 3 && y > i - 1 - columnAccum && y < i) {
                 numConsColumn = columnAccum;
 
                 // Store the bounds of the combination and stop the column search
-                c->yMin = i - 1 - columnAccum;
+                c->yMin = i - columnAccum;
                 c->yMax = i - 1;
                 break;
             }
@@ -170,11 +170,11 @@ bool checkForCombination(Item item[MAX_Y_SPRITES][MAX_X_SPRITES], uint8 y, uint8
         // Also, if there is nothing else to process, finish the evaluation right here
         if (item [y][i] != item[y][x] || i == MAX_X_SPRITES - 1) {
             // If the accumulator was more than 3 at some point and y was inside of it, flag the line as having that char
-            if (rowAccum >= 3 && x > i - 1 - rowAccum && x < i - 1) {
+            if (rowAccum >= 3 && x > i - 1 - rowAccum && x < i) {
                 numConsRow = rowAccum;
 
                 // Store the bounds of the combination and stop the column search
-                c->xMin = i - 1 - rowAccum;
+                c->xMin = i - rowAccum;
                 c->xMax = i - 1;
                 break;
             }
@@ -226,6 +226,7 @@ int removeItemsFromCombination(Item item[MAX_Y_SPRITES][MAX_X_SPRITES], uint8 y,
             } while (checkForCombination(item, y, i, &temp));
         }
     }
+    
     
     // Clear the combination
     c->yMax = -1;
