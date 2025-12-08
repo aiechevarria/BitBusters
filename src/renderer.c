@@ -66,7 +66,8 @@ void renderMenu() {
 }
 
 void printColored(const char text, int colorCode) {
-    printf("\033[0;%dm%x\033[0m", 30 + colorCode, text);
+    //printf("\033[0;%dm%x\033[0m", 30 + colorCode, text);
+    printf("%x", colorCode);
 }
 
 /**
@@ -79,7 +80,8 @@ void printLevelToConsole(Tile tiles[MAX_Y_SPRITES][MAX_X_SPRITES], Item items[MA
     for (int i = 0; i < MAX_Y_SPRITES; i++) {
         for (int j = 0; j < MAX_X_SPRITES; j++) {
 			if (i == cursorY && j == cursorX) {
-				printColored(9, items[i][j]);
+				//printColored(9, items[i][j]);
+				printColored(9, 9);
 			} else {
 				printColored(tiles[i][j], items[i][j]);
 			}

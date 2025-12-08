@@ -37,8 +37,8 @@ typedef enum {
     ITEM_PURPLE,
     ITEM_ROW,           // Clears an entire row
     ITEM_COLUMN,        // Clears an entire column
-    ITEM_SPARK,         // Clears the adjacent 9 tiles
-    ITEM_BOMB,          // Clears all the items in the level that are of the same type
+    ITEM_BOMB,         // Clears the adjacent 9 tiles
+    ITEM_SPARK,          // Clears all the items in the level that are of the same type
     ITEM_EMPTY,         // Represents no item
     NUM_ITEMS
 } Item;
@@ -54,6 +54,7 @@ typedef enum {
 // A full combination
 typedef struct {
     Item itemToGenerate;                                // What item should be generated due to this combination.
+    int8 itemY, itemX;                                  // Where the item should be placed
     int8 yMin, yMax;                                    // Y range that the combination has
     int8 xMin, xMax;                                    // X range that the combination has
 } Combination;
