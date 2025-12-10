@@ -71,7 +71,7 @@ typedef struct {
 
     // OBJ_DESTROY_ITEM
     Item objItemType;          // What item to destroy
-    uint16 objItemDestroy;     // How many of that color to destroy
+    uint16 objItemRemaining;   // How many items of that color are left to destroy
 
     // OBJ_GET_SCORE
     uint32 objScore;           // How much score should be reached to end the level
