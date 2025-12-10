@@ -55,7 +55,7 @@ typedef struct {
 } Pixel;
 
 // Item Sprites
-extern const char itemSprites[NUM_ITEMS][SPRITE_SIZE][SPRITE_SIZE];
-extern const char tileSprites[NUM_TILES][SPRITE_SIZE][SPRITE_SIZE];
+extern const Pixel itemSprites[NUM_ITEMS][SPRITE_SIZE][SPRITE_SIZE];
+extern const Pixel tileSprites[NUM_TILES][SPRITE_SIZE][SPRITE_SIZE];
 
 #endif
