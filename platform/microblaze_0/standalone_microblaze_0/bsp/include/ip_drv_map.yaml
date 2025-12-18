@@ -1,0 +1,18 @@
+axi_gpio_0:
+- axi_gpio
+- gpio
+axi_gpio_1:
+- axi_gpio
+- gpio
+axi_timer_1:
+- axi_timer
+- tmrctr
+mdm_1:
+- mdm
+- uartlite
+microblaze_0_axi_intc:
+- axi_intc
+- intc
+vga_control_0:
+- vga_control
+- None

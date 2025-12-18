@@ -1,0 +1,17 @@
+# ninja log v5
+9	392	0	CMakeFiles/tmrctr_example	4782eea74d192b98
+9	392	0	xtmrctr_exlist.yaml	4782eea74d192b98
+9	392	0	C:/Users/ruben/Documents/BitBusters/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/build_configs/exmetadata/CMakeFiles/tmrctr_example	4782eea74d192b98
+9	392	0	C:/Users/ruben/Documents/BitBusters/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/build_configs/exmetadata/xtmrctr_exlist.yaml	4782eea74d192b98
+16	404	0	CMakeFiles/uartlite_example	7644ffbd26797655
+16	404	0	xuartlite_exlist.yaml	7644ffbd26797655
+16	404	0	C:/Users/ruben/Documents/BitBusters/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/build_configs/exmetadata/CMakeFiles/uartlite_example	7644ffbd26797655
+16	404	0	C:/Users/ruben/Documents/BitBusters/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/build_configs/exmetadata/xuartlite_exlist.yaml	7644ffbd26797655
+2	414	0	CMakeFiles/gpio_example	f1e1453286f9f33
+2	414	0	xgpio_exlist.yaml	f1e1453286f9f33
+2	414	0	C:/Users/ruben/Documents/BitBusters/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/build_configs/exmetadata/CMakeFiles/gpio_example	f1e1453286f9f33
+2	414	0	C:/Users/ruben/Documents/BitBusters/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/build_configs/exmetadata/xgpio_exlist.yaml	f1e1453286f9f33
+22	418	0	CMakeFiles/intc_example	37ff85803c727c4
+22	418	0	xintc_exlist.yaml	37ff85803c727c4
+22	418	0	C:/Users/ruben/Documents/BitBusters/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/build_configs/exmetadata/CMakeFiles/intc_example	37ff85803c727c4
+22	418	0	C:/Users/ruben/Documents/BitBusters/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/build_configs/exmetadata/xintc_exlist.yaml	37ff85803c727c4

@@ -6,7 +6,7 @@
 #ifndef LEVELS_H
 #define LEVELS_H
 
-#include "types.h"
+#include "misc.h"
 
 #define MAX_LEVELS      3
 
@@ -37,8 +37,8 @@ typedef enum {
     ITEM_PURPLE,
     ITEM_ROW,           // Clears an entire row
     ITEM_COLUMN,        // Clears an entire column
-    ITEM_BOMB,         // Clears the adjacent 9 tiles
-    ITEM_SPARK,          // Clears all the items in the level that are of the same type
+    ITEM_SPARK,         // Clears the adjacent 9 tiles
+    ITEM_BOMB,          // Clears all the items in the level that are of the same type
     ITEM_EMPTY,         // Represents no item
     NUM_ITEMS
 } Item;
@@ -54,15 +54,14 @@ typedef enum {
 // A full combination
 typedef struct {
     Item itemToGenerate;                                // What item should be generated due to this combination.
-    int8 itemY, itemX;                                  // Where the item should be placed
-    int8 yMin, yMax;                                    // Y range that the combination has
-    int8 xMin, xMax;                                    // X range that the combination has
+    uint8 yMin, yMax;                                   // Y range that the combination has
+    uint8 xMin, xMax;                                   // X range that the combination has
 } Combination;
 
 typedef struct {
-    // General parameters
-    uint8 moves;
-    uint32 score;
+    // Parameters that do not update on each move
+    uint8 startMoves;
+    uint32 maxScore;
     Objective objective;
 
     // Params for particular objectives
@@ -71,20 +70,77 @@ typedef struct {
 
     // OBJ_DESTROY_ITEM
     Item objItemType;          // What item to destroy
-    uint16 objItemRemaining;   // How many items of that color are left to destroy
+    uint16 objItemDestroy;     // How many of that color to destroy
 
     // OBJ_GET_SCORE
-    uint32 objScore;           // How much score should be reached to end the level
+    uint16 objScore;           // How much score should be reached to end the level
 
-    // Background and foreground
-    Tile bg[MAX_Y_SPRITES][MAX_X_SPRITES];     // Current state of the background
-    Item fg[MAX_Y_SPRITES][MAX_X_SPRITES];     // Current state of the foreground
+    // Parameters that are updated on each move. This gets copied on init
+    uint8 moves;            // Remaining moves
+    uint8 score;            // Current score
+    Tile bg[MAX_X_SPRITES][MAX_Y_SPRITES];     // Current state of the background
+    Item fg[MAX_X_SPRITES][MAX_Y_SPRITES];     // Current state of the foreground
 } LevelInfo;
 
-extern const LevelInfo levels[MAX_LEVELS];
+const LevelInfo levels[MAX_LEVELS] = {
+    {
+        .startMoves = 25,
+        .maxScore = 0,
+        .objective = OBJ_DESTROY_CORPT,
+        .objCorptRemaining = 10,
+        .bg = {
+            {CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT}
+        }
+    },
+    {
+        .startMoves = 25,
+        .maxScore = 0,
+        .objective = OBJ_DESTROY_CORPT,
+        .objCorptRemaining = 10,
+        .bg = {
+            {CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT}
+        }
+    },
+    {
+        .startMoves = 25,
+        .maxScore = 0,
+        .objective = OBJ_DESTROY_CORPT,
+        .objCorptRemaining = 10,
+        .bg = {
+            {CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT, EMPTY},
+            {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, CORPT}
+        }
+    }
+};
+
 
 /* Public functions */
 void initLevel(LevelInfo* level, uint8 number);
-int performMove(LevelInfo* level, uint8 origY, uint8 origX, uint8 destY, uint8 destX);
 
 #endif

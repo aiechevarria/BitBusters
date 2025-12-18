@@ -2,7 +2,6 @@
 
 #include "renderer.h"
 #include "graphics.h"
-#include "levels.h"
 
 /**
  * Draws a particular pixel in the specified part of the screen.
@@ -65,27 +64,17 @@ void renderMenu() {
 
 }
 
-void printColored(const char text, int colorCode) {
-    //printf("\033[0;%dm%x\033[0m", 30 + colorCode, text);
-    printf("%x", colorCode);
-}
-
 /**
  * For debuging purposes, prints the current level to stdout.
  * 
  * @param tiles The tileset.
  * @param items The itemset.
  */
-void printLevelToConsole(Tile tiles[MAX_Y_SPRITES][MAX_X_SPRITES], Item items[MAX_Y_SPRITES][MAX_X_SPRITES], uint8 cursorY, uint8 cursorX) {
-    for (int i = 0; i < MAX_Y_SPRITES; i++) {
-        for (int j = 0; j < MAX_X_SPRITES; j++) {
-			if (i == cursorY && j == cursorX) {
-				//printColored(9, items[i][j]);
-				printColored(9, 9);
-			} else {
-				printColored(tiles[i][j], items[i][j]);
-			}
+void printLevelToConsole(Tile** tiles, Item** items) {
+    for (int i = 0; i < NUM_TILES; i++) {
+        for (int j = 0; j < NUM_TILES; j++) {
+            xil_printf("%x%x ", tiles[i][j], items[i][j]);
         }
-        printf("\n");
+        xil_printf("\n");
     }
 }

@@ -1,0 +1,10 @@
+
+
+OPTION psf_version = 2.1;
+
+BEGIN DRIVER vga_control
+	OPTION supported_peripherals = (vga_control);
+	OPTION copyfiles = all;
+	OPTION VERSION = 1.0;
+	OPTION NAME = vga_control;
+END DRIVER
